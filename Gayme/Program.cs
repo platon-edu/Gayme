@@ -5,44 +5,63 @@ namespace Gayme
 {
     class Program
     {
+        private static char[,] field;
+        private static Random r = new();
+        private static int size;
+        private static int myX, myY;
+        private static int score = 0;
+
         static void Main(string[] args)
         {
-            Console.Clear();
-            int x = 10, y = 10;
-            Console.SetCursorPosition(x, y);
-            char symb = '*';
-            while (true)
+            InitField();
+            PrintField();
+            
+            var key = Console.ReadKey();
+            switch (key.Key)
             {
-                if (Console.KeyAvailable)
-                {
-                    Console.Clear();
-
-                    ConsoleKeyInfo key = Console.ReadKey();
-                    Console.CursorVisible = false;
-                    switch (key.Key)
-                    {
-                        case ConsoleKey.Escape:
-                            Environment.Exit(0);
-                            break;
-                        case ConsoleKey.LeftArrow:
-                            x = Math.Max(0, x - 1);
-                            break;
-                        case ConsoleKey.RightArrow:
-                            x = Math.Min(Console.WindowWidth, x + 1);
-                            break;
-                        case ConsoleKey.UpArrow:
-                            y = Math.Max(0, y - 1);
-                            break;
-                        case ConsoleKey.DownArrow:
-                            y = Math.Min(Console.WindowHeight, y + 1);
-                            break;
-                        case ConsoleKey.D1:
-                            Console.SetCursorPosition(x, y);
-                            Console.Write(symb);
-                            break;
-                    }
-                }
+                case ConsoleKey.Q: break;
             }
+        }
+
+        private static void InitField()
+        {
+            size = 11;
+            field = new char[size, size];
+            for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                field[i, j] = ' ';
+
+            myX = size / 2;
+            myY = size / 2;
+            field[myY, myX] = 'x';
+            SpawnPoint();
+        }
+
+        private static void SpawnPoint()
+        {
+            int a = r.Next(0, size * size - 1);
+            while (field[a / size, a % size] != ' ') a = r.Next(0, size * size - 1);
+            field[a / size, a % size] = '*';
+        }
+
+        private static void PrintField()
+        {
+            Console.WriteLine('╔' + new string('═', size + 2) + '╗');
+            Console.WriteLine("║" + new string(' ', size + 2) + "║");
+            for (int i = 0; i < size; i++)
+            {
+                Console.Write("║ ");
+                for (int j = 0; j < size; j++)
+                {
+                    Console.Write(field[i, j]);
+                }
+
+                Console.Write(" ║\n");
+            }
+
+            Console.WriteLine("║" + new string(' ', size + 2) + "║");
+            Console.WriteLine('╚' + new string('═', size + 2) + '╝');
+            // ╚   ╝
         }
     }
 }
