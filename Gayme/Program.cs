@@ -7,8 +7,8 @@ namespace Gayme
     {
         private static char[,] field;
         private static Random r = new();
-        private static int size;
-        private static int myX, myY;
+        private static int size = 11;
+        private static int myX = size / 2, myY = size / 2;
         private static int score = 0;
 
         static void Main(string[] args)
@@ -23,9 +23,27 @@ namespace Gayme
                 else if (key == ConsoleKey.LeftArrow) MoveLeft();
                 else if (key == ConsoleKey.DownArrow) MoveDown();
                 else if (key == ConsoleKey.RightArrow) MoveRight();
+                else if (key == ConsoleKey.B) MakeBigger();
+                else if (key == ConsoleKey.S) MakeSmaller();
                 else continue;
                 PrintField();
             }
+        }
+
+        private static void MakeBigger()
+        {
+            size++;
+            InitField();
+            PrintField();
+        }
+
+        private static void MakeSmaller()
+        {
+            size = Math.Max(5, size - 1);
+            myX = Math.Min(myX, size - 1);
+            myY = Math.Min(myY, size - 1);
+            InitField();
+            PrintField();
         }
 
         private static void MoveUp()
@@ -53,6 +71,7 @@ namespace Gayme
 
             field[myX, myY] = 'x';
         }
+
         private static void MoveRight()
         {
             field[myX, myY] = ' ';
@@ -81,14 +100,10 @@ namespace Gayme
 
         private static void InitField()
         {
-            size = 11;
             field = new char[size, size];
             for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++)
                 field[i, j] = ' ';
-
-            myX = size / 2;
-            myY = size / 2;
             field[myY, myX] = 'x';
             SpawnPoint();
         }
