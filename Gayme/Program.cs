@@ -15,12 +15,68 @@ namespace Gayme
         {
             InitField();
             PrintField();
-            
-            var key = Console.ReadKey();
-            switch (key.Key)
+            while (true)
             {
-                case ConsoleKey.Q: break;
+                var key = Console.ReadKey().Key;
+                if (key == ConsoleKey.Q) break;
+                if (key == ConsoleKey.UpArrow) MoveUp();
+                else if (key == ConsoleKey.LeftArrow) MoveLeft();
+                else if (key == ConsoleKey.DownArrow) MoveDown();
+                else if (key == ConsoleKey.RightArrow) MoveRight();
+                else continue;
+                PrintField();
             }
+        }
+
+        private static void MoveUp()
+        {
+            field[myX, myY] = ' ';
+            myY = Math.Max(0, myY - 1);
+            if (field[myX, myY] == '*')
+            {
+                score++;
+                SpawnPoint();
+            }
+
+            field[myX, myY] = 'x';
+        }
+
+        private static void MoveDown()
+        {
+            field[myX, myY] = ' ';
+            myY = Math.Min(size - 1, myY + 1);
+            if (field[myX, myY] == '*')
+            {
+                score++;
+                SpawnPoint();
+            }
+
+            field[myX, myY] = 'x';
+        }
+        private static void MoveRight()
+        {
+            field[myX, myY] = ' ';
+            myX = Math.Min(size - 1, myX + 1);
+            if (field[myX, myY] == '*')
+            {
+                score++;
+                SpawnPoint();
+            }
+
+            field[myX, myY] = 'x';
+        }
+
+        private static void MoveLeft()
+        {
+            field[myX, myY] = ' ';
+            myX = Math.Max(0, myX - 1);
+            if (field[myX, myY] == '*')
+            {
+                score++;
+                SpawnPoint();
+            }
+
+            field[myX, myY] = 'x';
         }
 
         private static void InitField()
@@ -46,22 +102,21 @@ namespace Gayme
 
         private static void PrintField()
         {
+            Console.Clear();
             Console.WriteLine('╔' + new string('═', size + 2) + '╗');
-            Console.WriteLine("║" + new string(' ', size + 2) + "║");
             for (int i = 0; i < size; i++)
             {
                 Console.Write("║ ");
                 for (int j = 0; j < size; j++)
                 {
-                    Console.Write(field[i, j]);
+                    Console.Write(field[j, i]);
                 }
 
                 Console.Write(" ║\n");
             }
 
-            Console.WriteLine("║" + new string(' ', size + 2) + "║");
             Console.WriteLine('╚' + new string('═', size + 2) + '╝');
-            // ╚   ╝
+            Console.WriteLine($"Score: {score}");
         }
     }
 }
