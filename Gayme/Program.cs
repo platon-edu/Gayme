@@ -32,7 +32,7 @@ namespace Gayme
 
         private static void MakeBigger()
         {
-            size++;
+            size = Math.Min(size + 1, 27);
             InitField();
             PrintField();
         }
@@ -104,7 +104,7 @@ namespace Gayme
             for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++)
                 field[i, j] = ' ';
-            field[myY, myX] = 'x';
+            field[myX, myY] = 'x';
             SpawnPoint();
         }
 
